@@ -4,7 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from src.pagerank import compute_pagerank
 from src.hits import compute_hits
-
+from src.visualize import plot_graph
 # Step 1: Load dataset
 edges = pd.read_csv("data/network_edges.csv")
 
@@ -63,5 +63,6 @@ for node, score in top5_authorities:
 print("\nTop 5 Hubs:")
 for node, score in top5_hubs:
     print(f"{node}: {score:.4f}")
+plot_graph(G, pagerank_scores, authority_scores, hub_scores)
 plt.title("Directed Social Network Graph", fontsize=14)
 plt.show()
