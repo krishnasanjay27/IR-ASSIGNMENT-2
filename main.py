@@ -2,6 +2,7 @@
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
+from src.pagerank import compute_pagerank
 
 # Step 1: Load dataset
 edges = pd.read_csv("data/network_edges.csv")
@@ -28,5 +29,17 @@ nx.draw(
     arrowsize=15,
     edge_color="gray"
 )
+
+
+pagerank_scores = compute_pagerank(G)
+print("\n=== PageRank Scores ===")
+for node, score in sorted(pagerank_scores.items(), key=lambda x: x[1], reverse=True):
+    print(f"{node}: {score:.4f}")
+
+# Step 6: Display Top 5 nodes
+top5 = sorted(pagerank_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+print("\nTop 5 nodes by PageRank:")
+for node, score in top5:
+    print(f"{node}: {score:.4f}")
 plt.title("Directed Social Network Graph", fontsize=14)
 plt.show()
