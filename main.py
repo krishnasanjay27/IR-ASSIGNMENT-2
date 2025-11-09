@@ -3,6 +3,7 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 from src.pagerank import compute_pagerank
+from src.hits import compute_hits
 
 # Step 1: Load dataset
 edges = pd.read_csv("data/network_edges.csv")
@@ -41,5 +42,27 @@ top5 = sorted(pagerank_scores.items(), key=lambda x: x[1], reverse=True)[:5]
 print("\nTop 5 nodes by PageRank:")
 for node, score in top5:
     print(f"{node}: {score:.4f}")
+
+authority_scores, hub_scores = compute_hits(G)
+
+print("\n=== HITS: Authority Scores ===")
+for node, score in sorted(authority_scores.items(), key=lambda x: x[1], reverse=True):
+    print(f"{node}: {score:.4f}")
+
+print("\n=== HITS: Hub Scores ===")
+for node, score in sorted(hub_scores.items(), key=lambda x: x[1], reverse=True):
+    print(f"{node}: {score:.4f}")
+
+# Step 8: Display top 5 authorities and hubs
+top5_authorities = sorted(authority_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+top5_hubs = sorted(hub_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+
+print("\nTop 5 Authorities:")
+for node, score in top5_authorities:
+    print(f"{node}: {score:.4f}")
+
+print("\nTop 5 Hubs:")
+for node, score in top5_hubs:
+    print(f"{node}: {score:.4f}")    
 plt.title("Directed Social Network Graph", fontsize=14)
 plt.show()
