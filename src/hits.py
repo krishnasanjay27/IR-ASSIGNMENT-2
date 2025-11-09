@@ -1,7 +1,7 @@
 # src/hits.py
 import math
 
-def compute_hits(G, tol=1e-4, max_iter=100):
+def compute_hits(G, tol=1e-4, max_iter=2):
     """
     Compute HITS (Authority and Hub) scores iteratively for a directed graph.
     :param G: Directed graph (NetworkX DiGraph)
@@ -27,11 +27,11 @@ def compute_hits(G, tol=1e-4, max_iter=100):
 
         # Update hub: sum of authority values of outgoing nodes
         for node in nodes:
-            new_hub[node] = sum(new_authority[n] for n in G.successors(node))
+            new_hub[node] = sum(authority[n] for n in G.successors(node))
 
         # Normalize authority and hub values
-        norm_auth = math.sqrt(sum(v ** 2 for v in new_authority.values()))
-        norm_hub = math.sqrt(sum(v ** 2 for v in new_hub.values()))
+        norm_auth = (sum(v for v in new_authority.values()))
+        norm_hub = (sum(v for v in new_hub.values()))
 
         for node in nodes:
             if norm_auth != 0:
