@@ -2,14 +2,6 @@
 import networkx as nx
 
 def compute_pagerank(G, d=0.85, tol=1e-4, max_iter=100):
-    """
-    Compute PageRank values iteratively for a directed graph.
-    :param G: Directed graph (NetworkX DiGraph)
-    :param d: Damping factor (default 0.85)
-    :param tol: Convergence tolerance
-    :param max_iter: Max number of iterations
-    :return: Dictionary of {node: PageRank value}
-    """
     N = len(G)
     if N == 0:
         return {}
