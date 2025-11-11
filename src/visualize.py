@@ -2,41 +2,66 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def plot_graph(G, pagerank_scores, authority_scores, hub_scores):
+def plot_multiple_graphs(G, pagerank_scores, authority_scores, hub_scores):
     """
-    Visualize the directed graph with PageRank, Authority, and Hub highlights.
+    Plot three separate graphs:
+    1. PageRank visualization (size ∝ PR, blue circles)
+    2. Authority visualization (size ∝ authority, red squares)
+    3. Hub visualization (size ∝ hub, green triangles)
     """
-    # Determine top authorities and hubs (top 5 each)
-    top_authorities = sorted(authority_scores, key=authority_scores.get, reverse=True)[:5]
-    top_hubs = sorted(hub_scores, key=hub_scores.get, reverse=True)[:5]
 
-    # Node sizes based on PageRank
-    node_sizes = [5000 * pagerank_scores[node] for node in G.nodes()]
+    # Common layout (so all three have same positioning)
+    pos = nx.spring_layout(G, seed=42, k=0.6)
 
-    # Node colors based on category
-    node_colors = []
-    for node in G.nodes():
-        if node in top_authorities:
-            node_colors.append("green")
-        elif node in top_hubs:
-            node_colors.append("red")
-        else:
-            node_colors.append("lightblue")
+    plt.figure(figsize=(18, 6))
+    plt.suptitle("PageRank and HITS Visualizations", fontsize=16, y=0.98)
 
-    # Layout and draw
-    plt.figure(figsize=(9, 7))
-    pos = nx.spring_layout(G, seed=42)
-
+    # === 1️⃣ PageRank Graph ===
+    plt.subplot(1, 3, 1)
+    node_sizes_pr = [6000 * pagerank_scores[node] for node in G.nodes()]
     nx.draw(
         G, pos,
         with_labels=True,
-        node_color=node_colors,
-        node_size=node_sizes,
-        font_size=10,
-        arrowsize=15,
-        edge_color="gray"
+        node_color="skyblue",
+        node_size=node_sizes_pr,
+        edge_color="gray",
+        arrows=True,
+        arrowsize=12,
+        font_weight="bold"
     )
+    plt.title("PageRank (Size ∝ Importance)", fontsize=12)
 
-    plt.title("Network Visualization — PageRank, Hubs, and Authorities", fontsize=14)
-    plt.savefig("results/network_plot.png", dpi=300, bbox_inches="tight")
+    # === 2️⃣ Authority Graph ===
+    plt.subplot(1, 3, 2)
+    node_sizes_auth = [6000 * authority_scores[node] for node in G.nodes()]
+    nx.draw(
+        G, pos,
+        with_labels=True,
+        node_color="lightcoral",
+        node_shape="s",  # square
+        node_size=node_sizes_auth,
+        edge_color="gray",
+        arrows=True,
+        arrowsize=12,
+        font_weight="bold"
+    )
+    plt.title("HITS - Authority Scores (Red Squares)", fontsize=12)
+
+    # === 3️⃣ Hub Graph ===
+    plt.subplot(1, 3, 3)
+    node_sizes_hub = [6000 * hub_scores[node] for node in G.nodes()]
+    nx.draw(
+        G, pos,
+        with_labels=True,
+        node_color="lightgreen",
+        node_shape="^",  # triangle
+        node_size=node_sizes_hub,
+        edge_color="gray",
+        arrows=True,
+        arrowsize=12,
+        font_weight="bold"
+    )
+    plt.title("HITS - Hub Scores (Green Triangles)", fontsize=12)
+
+    plt.tight_layout()
     plt.show()

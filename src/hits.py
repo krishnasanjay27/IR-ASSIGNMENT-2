@@ -1,7 +1,7 @@
 # src/hits.py
 import math
 
-def compute_hits(G, tol=1e-4, max_iter=2):
+def compute_hits(G, tol=1e-4, max_iter=100):
     """
     Compute HITS (Authority and Hub) scores iteratively for a directed graph.
     :param G: Directed graph (NetworkX DiGraph)
